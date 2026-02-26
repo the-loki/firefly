@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firefly Raytracing Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background: #1a1a2e;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #eee;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+      color: #ff6b35;
+    }
+    .subtitle {
+      margin-bottom: 20px;
+      color: #888;
+      font-size: 14px;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .canvas-container {
+      position: relative;
+    }
+    canvas {
+      border: 2px solid #ff6b35;
+      border-radius: 8px;
+      display: block;
+    }
+    .stats {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    .controls {
+      background: #252540;
+      padding: 20px;
+      border-radius: 8px;
+      min-width: 250px;
+    }
+    .controls h2 {
+      color: #ff6b35;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .control-group {
+      margin-bottom: 15px;
+    }
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: #aaa;
+    }
+    .control-group input[type="range"] {
+      width: 100%;
+      cursor: pointer;
+    }
+    .control-group select {
+      width: 100%;
+      padding: 8px;
+      background: #1a1a2e;
+      color: #eee;
+      border: 1px solid #444;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .control-group .value {
+      font-size: 12px;
+      color: #ff6b35;
+      float: right;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ff6b35;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #ff8555;
+    }
+    .error {
+      color: #ff4444;
+      padding: 20px;
+      text-align: center;
+      display: none;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Firefly Raytracing Demo</h1>
+  <p class="subtitle">Real-time WebGPU Path Tracing - Inspired by RayTracing in One Weekend</p>
+
+  <div class="container">
+    <div class="canvas-container">
+      <canvas id="canvas" width="800" height="600"></canvas>
+      <div class="stats">
+        <div>Samples: <span id="samples">0</span></div>
+        <div>FPS: <span id="fps">0</span></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <h2>Controls</h2>
+
+      <div class="control-group">
+        <label>Samples Per Frame <span class="value" id="spfValue">1</span></label>
+        <input type="range" id="spf" min="1" max="10" value="1">
+      </div>
+
+      <div class="control-group">
+        <label>Max Bounces <span class="value" id="bouncesValue">8</span></label>
+        <input type="range" id="bounces" min="1" max="20" value="8">
+      </div>
+
+      <div class="control-group">
+        <label>Scene</label>
+        <select id="scene">
+          <option value="default">Default Scene</option>
+          <option value="spheres">Many Spheres</option>
+          <option value="glass">Glass Test</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="animate" checked>
+          <label for="animate">Animate Camera</label>
+        </div>
+      </div>
+
+      <button id="reset">Reset Accumulation</button>
+      <button id="save">Save Image</button>
+    </div>
+  </div>
+
+  <div id="error" class="error"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
