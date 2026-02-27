@@ -3,7 +3,7 @@
  * Real-time path tracing using WebGPU compute shaders
  */
 
-import { Raytracer } from './raytracer';
+import { Raytracer } from './core/Raytracer';
 import {
   SceneData,
   RenderSettings,
@@ -11,8 +11,7 @@ import {
   generateRandomScene,
   generateGlassScene,
   CameraParams,
-  Vec3,
-} from './types';
+} from './scene';
 
 interface AppElements {
   canvas: HTMLCanvasElement;
